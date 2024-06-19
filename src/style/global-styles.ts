@@ -1,0 +1,15 @@
+export const color = {
+  green_300: '#9edc7a',
+  green_400: '#86d45a',
+  green_500: '#6fcc3a',
+  green_600: '#60bb32',
+  green_700: '#4aa728',
+  green_800: '#33931e',
+  grey_200: '#eeeeee',
+  grey_300: '#e0e0e0',
+  grey_400: '#bdbdbd',
+  grey_500: '#9e9e9e',
+  grey_600: '#757575',
+  grey_700: '#616161',
+  grey_800: '#424242',
+};

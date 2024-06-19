@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main-content::-webkit-scrollbar {
+  width: 0 !important;
+}
