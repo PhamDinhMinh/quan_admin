@@ -10,7 +10,6 @@ import {
   Skeleton,
   Space,
 } from 'antd';
-import dayjs from 'dayjs';
 import { useEffect } from 'react';
 
 import { EUserRole } from '../services/user.model';

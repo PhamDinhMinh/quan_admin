@@ -7,7 +7,6 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import {
-  Avatar,
   Button,
   Divider,
   Dropdown,

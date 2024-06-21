@@ -1,14 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, Typography } from 'antd';
-import {
-  BarChart4,
-  BookOpenCheck,
-  BookOpenText,
-  Lightbulb,
-  PencilRuler,
-  UserCog,
-} from 'lucide-react';
+import { UserCog } from 'lucide-react';
 import { useMemo } from 'react';
 import { useLocation } from 'react-use';
 import styled from 'styled-components';
