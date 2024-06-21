@@ -1,22 +1,22 @@
 import httpService from '@/shared/http-service';
 import { TPaginated } from '@/shared/types/paginated.type';
 
-import { TUpdateUserDto, TUser } from './user.model';
+import { IUserInfoDetail, TUpdateUserDto, TUser } from './user.model';
 
 class UserService {
-  endpoint = '/api/services/app/User';
+  endpoint = '/api/user';
 
   getListUser(input: { skipCount?: number; maxResultCount?: number }) {
     return httpService.request<TPaginated<TUser>>({
-      url: this.endpoint + '/GetAllUser',
+      url: this.endpoint + '',
       method: 'GET',
       params: input,
     });
   }
 
   getUser(id: number) {
-    return httpService.request<{ data: TUser }>({
-      url: this.endpoint + '/GetById',
+    return httpService.request<{ data: IUserInfoDetail }>({
+      url: this.endpoint + '/with-info',
       method: 'GET',
       params: {
         id: id,

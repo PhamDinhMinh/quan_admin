@@ -96,7 +96,7 @@ function LoginPage() {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item<TLoginInput>
-              name="userNameOrEmail"
+              name="email"
               rules={[
                 {
                   required: true,

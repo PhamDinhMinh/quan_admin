@@ -7,7 +7,6 @@ import axios, {
 import Cookies from 'js-cookie';
 
 import { ACCESS_TOKEN_KEY, SERVER_BASE_URL } from '@/configs/constants';
-import authService from '@/modules/auth/auth.service';
 
 type THttpRequest = {
   url: string;
@@ -15,6 +14,7 @@ type THttpRequest = {
   data?: any;
   params?: any;
   contentType?: string;
+  tokenCsrf?: any;
   paramsSerializer?: (params: any) => string;
 };
 
@@ -67,17 +67,6 @@ class HttpService {
           return Promise.reject(error);
         }
 
-        if (error.response?.status === 401) {
-          const success = await authService.refreshToken();
-
-          if (success) {
-            return this.httpWithAuth(error.config as AxiosRequestConfig);
-          } else {
-            await authService.logout();
-            return Promise.reject(error);
-          }
-        }
-
         return Promise.reject(error);
       },
     );
@@ -106,7 +95,7 @@ class HttpService {
     method,
     contentType,
     paramsSerializer,
-  }: THttpRequest): Promise<THttpResponse<T>> {
+  }: THttpRequest): Promise<any> {
     const config: AxiosRequestConfig = {
       url,
       method,
@@ -119,9 +108,9 @@ class HttpService {
       paramsSerializer,
     };
 
-    const response = await this.httpWithAuth.request<THttpResponse<T>>(config);
+    const response = await this.httpWithAuth.request<T>(config);
 
-    return response.data;
+    return response;
   }
 
   async requestNoAuth<T>({
@@ -130,7 +119,8 @@ class HttpService {
     data,
     method,
     contentType,
-  }: THttpRequest): Promise<THttpResponse<T>> {
+    tokenCsrf,
+  }: THttpRequest): Promise<any> {
     const config: AxiosRequestConfig = {
       url,
       method,
@@ -139,6 +129,7 @@ class HttpService {
       headers: {
         'Content-Type': contentType || 'application/json',
         'Access-Control-Allow-Origin': '*',
+        'X-CSRF-Token': tokenCsrf,
       },
     };
 
@@ -147,29 +138,6 @@ class HttpService {
 
     return response.data;
   }
-
-  // async requestLogout<T>({
-  //   url,
-  //   params,
-  //   data,
-  //   method,
-  //   contentType,
-  // }: THttpRequest): Promise<T> {
-  //   const config: AxiosRequestConfig = {
-  //     url,
-  //     method,
-  //     params,
-  //     data,
-  //     headers: {
-  //       'Content-Type': contentType || 'application/json',
-  //       'Access-Control-Allow-Origin': '*',
-  //     },
-  //   };
-
-  //   const response = await this.httpLogout.request<T>(config);
-
-  //   return response.data;
-  // }
 }
 
 const httpService = new HttpService();

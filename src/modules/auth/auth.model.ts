@@ -1,7 +1,7 @@
 import { TUser } from '../users/services/user.model';
 
 export type TLoginInput = {
-  userNameOrEmail: string;
+  email: string;
   password: string;
 };
 

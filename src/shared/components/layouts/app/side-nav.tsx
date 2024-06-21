@@ -1,7 +1,14 @@
-import { AppstoreOutlined } from '@ant-design/icons';
 import { useNavigate } from '@tanstack/react-router';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, Typography } from 'antd';
+import {
+  BarChart4,
+  BookOpenCheck,
+  BookOpenText,
+  Lightbulb,
+  PencilRuler,
+  UserCog,
+} from 'lucide-react';
 import { useMemo } from 'react';
 import { useLocation } from 'react-use';
 import styled from 'styled-components';
@@ -16,7 +23,7 @@ type TMainSideNavProps = {
 };
 
 const MainSideNav = ({ collapsed, setCollapsed }: TMainSideNavProps) => {
-  const { t, token, isDarkTheme } = useApp();
+  const { token, isDarkTheme } = useApp();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,12 +31,12 @@ const MainSideNav = ({ collapsed, setCollapsed }: TMainSideNavProps) => {
   const items: MenuProps['items'] = useMemo(
     () => [
       {
-        key: '/estates',
-        icon: <AppstoreOutlined />,
-        label: t('Estates'),
+        key: '/user-setting',
+        icon: <UserCog size={18} />,
+        label: 'Quản lý người dùng',
       },
     ],
-    [t],
+    [],
   );
 
   const onClick: MenuProps['onClick'] = (e) => {
@@ -47,17 +54,21 @@ const MainSideNav = ({ collapsed, setCollapsed }: TMainSideNavProps) => {
       onCollapse={setCollapsed}
       theme={isDarkTheme ? 'light' : 'dark'}
     >
-      <LogoWrapper token={token} onClick={() => navigate({ to: '/' })}>
+      <LogoWrapper
+        token={token}
+        style={{ marginLeft: 5, marginRight: 5 }}
+        onClick={() => navigate({ to: '/' })}
+      >
         <img
           src="/assets/images/logo.png"
           alt="logo"
-          width={80 - token.padding}
+          width={70 - token.padding}
           style={{
             background: `linear-gradient(45deg, ${token.colorPrimary}, ${token.colorWhite})`,
-            padding: collapsed ? token.padding : token.padding / 2,
+            padding: collapsed ? token.padding : (token.padding * 3) / 4,
             borderRadius: token.borderRadius,
             transition: 'ease-in-out 1s',
-            marginRight: collapsed ? 0 : token.margin / 2,
+            marginRight: collapsed ? 0 : (token.margin * 3) / 4,
           }}
         />
 
@@ -80,7 +91,7 @@ const MainSideNav = ({ collapsed, setCollapsed }: TMainSideNavProps) => {
         mode="inline"
         items={items}
         selectedKeys={[location.pathname as string]}
-        style={{ borderInlineEnd: 'none' }}
+        style={{ borderInlineEnd: 'none', paddingLeft: 10, paddingRight: 10 }}
       />
     </Layout.Sider>
   );

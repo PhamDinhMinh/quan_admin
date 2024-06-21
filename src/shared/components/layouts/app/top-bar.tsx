@@ -104,13 +104,9 @@ const MainTopBar = ({ collapsed, setCollapse }: TMainTopBarProps) => {
           menu={{ items: dropItems }}
           placement="bottomRight"
         >
-          {user?.imageUrl ? (
-            <SAvatar token={token} size={48} src={user.imageUrl} />
-          ) : (
-            <SAvatar token={token} size={48}>
-              {/* {user?.firstName.charAt(0)} */}
-            </SAvatar>
-          )}
+          <SAvatar token={token} size={48}>
+            {user?.role.charAt(0)}
+          </SAvatar>
         </Dropdown>
       </Space>
     </SHeader>

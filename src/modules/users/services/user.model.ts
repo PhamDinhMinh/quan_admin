@@ -1,15 +1,10 @@
 export type TUser = {
-  id: number;
-  userName: string;
-  name: string;
-  emailAddress: string;
-  phoneNumber?: string;
-  creationTime: string;
-  role?: string;
-  dateOfBirth?: any;
-  gender?: string;
-  imageUrl?: string;
-  coverAvatarUrl?: string;
+  admin_id: 42;
+  agent_id: null | number;
+  device_id: null | number;
+  email: string;
+  id: 963;
+  role: string;
 };
 
 export type TUpdateUserDto = {
@@ -27,6 +22,21 @@ export enum EUserGender {
 }
 
 export enum EUserRole {
-  ADMIN = 'Admin',
-  USER = 'User',
+  ADMIN = 'admin',
+  AGENT = 'agent',
+  USER = 'user',
+}
+
+export interface IUserInfoDetail {
+  adminInfo: {
+    id: number;
+    user_id: number;
+    channel_link: string;
+    contact_info: string;
+  };
+  agentInfo: any;
+  device_id: null | number;
+  email: string;
+  id: number;
+  role: string;
 }

@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as AppUserSettingIndexImport } from './routes/_app/user-setting/index'
 import { Route as AppEstatesIndexImport } from './routes/_app/estates/index'
 import { Route as AuthAuthLoginImport } from './routes/_auth/auth/login'
 
@@ -32,6 +33,11 @@ const AppRoute = AppImport.update({
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AppUserSettingIndexRoute = AppUserSettingIndexImport.update({
+  path: '/user-setting/',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppEstatesIndexRoute = AppEstatesIndexImport.update({
@@ -68,6 +74,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEstatesIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/user-setting/': {
+      preLoaderRoute: typeof AppUserSettingIndexImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -75,7 +85,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  AppRoute.addChildren([AppEstatesIndexRoute]),
+  AppRoute.addChildren([AppEstatesIndexRoute, AppUserSettingIndexRoute]),
   AuthRoute.addChildren([AuthAuthLoginRoute]),
 ])
 
