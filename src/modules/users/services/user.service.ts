@@ -46,7 +46,7 @@ class UserService {
       url: this.endpoint,
       method: 'DELETE',
       params: {
-        id: id,
+        userId: id,
       },
     });
   }
