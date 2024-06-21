@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   App,
   Button,
@@ -11,10 +11,12 @@ import {
 } from 'antd';
 import { useEffect, useRef } from 'react';
 
+import { useAppStore } from '@/modules/app/app.zustand';
+
 import { EUserRole } from '../services/user.model';
 import userService from '../services/user.service';
 
-type TUserFormDrawerProps = {
+type TUserFormCreateProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   action: 'create' | 'update';
@@ -22,48 +24,40 @@ type TUserFormDrawerProps = {
   refetch?: () => Promise<any>;
 };
 
-const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
+const UserFormCreate: React.FC<TUserFormCreateProps> = ({
   open,
   setOpen,
-  id = 0,
   refetch,
-}: TUserFormDrawerProps) => {
+}: TUserFormCreateProps) => {
   const { message } = App.useApp();
-  const [form] = Form.useForm();
   const hiddenSubmitRef = useRef<any>();
+  const setLoading = useAppStore((state) => state.setLoading);
 
-  const { data: getUserById, isLoading } = useQuery({
-    queryKey: ['/get-user-by-id', id],
-    enabled: !!id,
-    queryFn: () => (id ? userService.getUser(id) : undefined),
-  });
+  const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (getUserById?.data?.user) {
-      const user = getUserById?.data?.user;
-      form.setFieldsValue({
-        ...user,
-      });
-    }
-  }, [getUserById?.data, form]);
-
-  const updateUserMutation = useMutation({
-    mutationFn: (data: any) => userService.updateUser(id, data),
+  const { mutate: createMutate, isPending } = useMutation({
+    mutationFn: (data: any) => userService.create(data),
     onSuccess: async () => {
+      setLoading(false);
       refetch && (await refetch());
-      message.success('Chỉnh sửa thành công');
+      message.success('Tạo mới thành công');
       setOpen(false);
       form.resetFields();
     },
     onError: (error) => {
+      setLoading(false);
       message.error(error.message);
     },
   });
 
+  useEffect(() => {
+    form.resetFields();
+  }, [form]);
+
   return (
     <Drawer
       forceRender
-      title="Chỉnh sửa"
+      title={'Tạo mới'}
       open={open}
       onClose={() => setOpen(false)}
       width={640}
@@ -73,8 +67,8 @@ const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
 
           <Button
             type="primary"
-            loading={updateUserMutation.isPending}
-            disabled={isLoading}
+            loading={isPending}
+            disabled={isPending}
             onClick={() => {
               form.submit();
               hiddenSubmitRef.current.click();
@@ -85,7 +79,7 @@ const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
         </Space>
       }
     >
-      {isLoading ? (
+      {isPending ? (
         <Skeleton />
       ) : (
         <Form
@@ -95,12 +89,22 @@ const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           onFinish={(values) => {
-            updateUserMutation.mutate(values);
+            createMutate(values);
           }}
         >
           <Form.Item
             name="email"
-            label={'Email'}
+            label="Email"
+            rules={[
+              { required: true, message: 'Trường này không được bỏ trống!' },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            label="Password"
             rules={[
               { required: true, message: 'Trường này không được bỏ trống!' },
             ]}
@@ -116,7 +120,6 @@ const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
             ]}
           >
             <Select
-              defaultValue={getUserById?.user?.role}
               style={{ width: 120 }}
               options={[
                 { value: EUserRole.AGENT, label: 'Đại lý' },
@@ -147,4 +150,4 @@ const UserFormDrawer: React.FC<TUserFormDrawerProps> = ({
   );
 };
 
-export default UserFormDrawer;
+export default UserFormCreate;

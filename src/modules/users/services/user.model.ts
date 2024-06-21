@@ -8,11 +8,10 @@ export type TUser = {
 };
 
 export type TUpdateUserDto = {
-  gender?: string;
-  emailAddress?: string;
-  name?: string;
-  phoneNumber?: string;
-  dateOfBirth?: any;
+  role?: string;
+  email?: string;
+  agentId?: number | null;
+  adminId?: number | null;
 };
 
 export enum EUserGender {

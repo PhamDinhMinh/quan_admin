@@ -24,20 +24,26 @@ class UserService {
     });
   }
 
+  create(input: any) {
+    return httpService.request<any>({
+      url: this.endpoint,
+      method: 'POST',
+      data: input,
+    });
+  }
+
   updateUser(id: number, input: TUpdateUserDto) {
     return httpService.request<TUser>({
-      url: this.endpoint + '/UpdateForAdmin',
+      url: this.endpoint,
       method: 'PUT',
-      data: {
-        ...input,
-        id: id,
-      },
+      data: input,
+      params: { userId: id },
     });
   }
 
   deleteUser(id: number) {
     return httpService.request<void>({
-      url: this.endpoint + '/Delete',
+      url: this.endpoint,
       method: 'DELETE',
       params: {
         id: id,

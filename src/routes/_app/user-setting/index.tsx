@@ -22,6 +22,7 @@ import { useDebounce } from 'react-use';
 
 import useApp from '@/hooks/use-app';
 import { useAppTitle } from '@/hooks/use-app-title';
+import UserFormCreate from '@/modules/users/components/user-form-create';
 import UserFormDrawer from '@/modules/users/components/user-form-drawer';
 import UserPreviewDrawer from '@/modules/users/components/user-preview-drawer';
 import UserRoleTag from '@/modules/users/components/user-role-tag';
@@ -105,13 +106,15 @@ function UserSettingPage() {
 
   return (
     <>
-      <UserFormDrawer
-        open={openFormDrawer}
-        setOpen={setOpenFormDrawer}
-        action={formMode}
-        id={formId}
-        refetch={refetch}
-      />
+      {formMode === 'update' && (
+        <UserFormDrawer
+          open={openFormDrawer}
+          setOpen={setOpenFormDrawer}
+          action={formMode}
+          id={formId}
+          refetch={refetch}
+        />
+      )}
 
       <UserPreviewDrawer
         open={openPreviewDrawer}
@@ -119,21 +122,43 @@ function UserSettingPage() {
         id={selectedId}
       />
 
+      {formMode === 'create' && (
+        <UserFormCreate
+          open={openFormDrawer}
+          setOpen={setOpenFormDrawer}
+          action={formMode}
+          id={formId}
+          refetch={refetch}
+        />
+      )}
+
       <TitleHeading>{'Quản lý người dùng'}</TitleHeading>
 
       <Divider />
 
       <Flex vertical gap={token.size}>
-        <Flex justify="flex-end">
-          <div>
+        <Flex justify="space-between">
+          <Space direction="horizontal" style={{ width: '100%' }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setOpenFormDrawer(true);
+                setFormMode('create');
+              }}
+            >
+              Tạo mới
+            </Button>
+          </Space>
+
+          <Space direction="horizontal">
             <Space direction="horizontal" style={{ width: '100%' }}>
               <Input.Search
-                placeholder={'Tìm kiếm'}
+                placeholder="Tìm kiếm"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Space>
-          </div>
+          </Space>
         </Flex>
 
         <Table
